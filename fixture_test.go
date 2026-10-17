@@ -59,6 +59,16 @@ func (c Case) In(name string) []float64 {
 	return nil
 }
 
+// huge reports whether the case regenerates a million points or more.
+func (c Case) huge() bool {
+	for _, g := range c.Gens {
+		if g.N >= 1000000 {
+			return true
+		}
+	}
+	return false
+}
+
 func (c Case) has(name string) bool {
 	_, a := c.Arr[name]
 	_, g := c.Gens[name]

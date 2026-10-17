@@ -63,7 +63,9 @@ for line in sys.stdin:
   try:
    if 'set' in r:E[r['set']]=d(r['v']);o.append({})
    else:
-    t=time.perf_counter();x=c(r);t=time.perf_counter()-t
+    n=r.get('rep',1);t=time.perf_counter()
+    for _ in range(n):x=c(r)
+    t=(time.perf_counter()-t)/n
     o.append({'o':e(x),'time':t})
   except Exception as x:o.append({'err':type(x).__name__+': '+str(x)})
  print(json.dumps(o),flush=True)
@@ -178,6 +180,9 @@ type Call struct {
 	Fn   string
 	Args []any
 	Kw   map[string]any
+	// Rep, when > 1, makes the oracle run the call Rep times and report the
+	// mean time per call (Result.Time).
+	Rep int
 }
 
 // MarshalJSON implements json.Marshaler.
@@ -188,6 +193,9 @@ func (c Call) MarshalJSON() ([]byte, error) {
 	}
 	if len(c.Kw) > 0 {
 		m["kw"] = c.Kw
+	}
+	if c.Rep > 1 {
+		m["rep"] = c.Rep
 	}
 	return json.Marshal(m)
 }

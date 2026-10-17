@@ -13,6 +13,9 @@ var basisFiles = []string{"basis_chebyshev.json", "basis_legendre.json", "basis_
 func forEach(t *testing.T, file string, f func(c Case, got map[string][]float64)) {
 	t.Helper()
 	for _, c := range loadCases(t, file) {
+		if testing.Short() && c.huge() {
+			continue // 10^6-point fixtures are too slow under qemu
+		}
 		got, err := runCase(c)
 		switch {
 		case c.Err != "" && err == nil:

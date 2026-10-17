@@ -107,6 +107,9 @@ func TestArguments(t *testing.T) {
 	if got := enc(Call{Fn: "np.polyfit", Args: []any{Ref("a"), 2}, Kw: map[string]any{"full": true}}); got != `{"args":[{"ref":"a"},2],"fn":"np.polyfit","kw":{"full":true}}` {
 		t.Error(got)
 	}
+	if got := enc(Call{Fn: "f", Rep: 5}); got != `{"args":[],"fn":"f","rep":5}` {
+		t.Error(got)
+	}
 	if got := enc(Set{Name: "a", V: Arr(nil)}); got != `{"set":"a","v":{"a":[]}}` {
 		t.Error(got)
 	}
