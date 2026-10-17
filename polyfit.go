@@ -61,8 +61,28 @@ func Polyfit(x, y []float64, deg int, o *FitOptions) (Fit, error) {
 	if rcond == 0 {
 		rcond = float64(m) * eps
 	}
-	a := make([]float64, m*n)
-	// numpy.vander(x, n): column j holds x^(n-1-j), by repeated multiplication.
+	a, scale := polyDesign(x, o.W, deg)
+	rhs := weighted(y, o.W)
+	return finishFit(a, m, n, rhs, rcond, scale, o.Cov)
+}
+
+// weighted returns a copy of y with y[i] multiplied by w[i] (w may be nil).
+func weighted(y, w []float64) []float64 {
+	r := append([]float64(nil), y...)
+	if w != nil {
+		for i := range r {
+			r[i] *= w[i]
+		}
+	}
+	return r
+}
+
+// polyDesign builds the weighted Vandermonde matrix of numpy.vander(x, deg+1)
+// (column-major, column j holds x^(deg-j) by repeated multiplication) with
+// its columns scaled to unit 2-norm; scale holds the norms.
+func polyDesign(x, w []float64, deg int) (a, scale []float64) {
+	m, n := len(x), deg+1
+	a = make([]float64, m*n)
 	for i, xv := range x {
 		p := 1.0
 		for j := n - 1; j >= 0; j-- {
@@ -70,27 +90,20 @@ func Polyfit(x, y []float64, deg int, o *FitOptions) (Fit, error) {
 			p *= xv
 		}
 	}
-	rhs := append([]float64(nil), y...)
-	if o.W != nil {
-		for j := 0; j < n; j++ {
-			col := a[j*m : (j+1)*m]
-			for i := range col {
-				col[i] *= o.W[i]
-			}
-		}
-		for i := range rhs {
-			rhs[i] *= o.W[i]
-		}
-	}
-	scale := make([]float64, n)
+	scale = make([]float64, n)
 	for j := range scale {
 		col := a[j*m : (j+1)*m]
+		if w != nil {
+			for i := range col {
+				col[i] *= w[i]
+			}
+		}
 		scale[j] = math.Sqrt(dot(col, col))
 		for i := range col {
 			col[i] /= scale[j]
 		}
 	}
-	return finishFit(a, m, n, rhs, rcond, scale, o.Cov)
+	return a, scale
 }
 
 // finishFit runs the QR solve and builds the Fit, undoing the column scaling.

@@ -269,17 +269,14 @@ func Der(b Basis, c []float64, m int, scl float64) ([]float64, error) {
 	if m < 0 {
 		return nil, ErrArg
 	}
-	if len(c) == 0 {
-		return nil, ErrEmpty
-	}
 	if b < Chebyshev || b > Laguerre {
 		return nil, ErrBasis
 	}
 	c = append([]float64(nil), c...)
-	if m == 0 {
-		return c, nil
-	}
 	n := len(c)
+	if m == 0 || n == 0 {
+		return c, nil // numpy returns an empty series unchanged
+	}
 	if m >= n {
 		return []float64{c[0] * 0}, nil
 	}

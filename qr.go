@@ -98,9 +98,28 @@ func finite(v []float64) bool {
 // triangular factor, which has the singular values of a and so gives NumPy's
 // SVD-based answer.
 func lstsqQR(a []float64, m, n int, y []float64, rcond float64) (lsq, error) {
-	if !finite(a) || !finite(y) {
+	if !finite(a) {
 		return lsq{}, ErrNonFinite
 	}
+	nanY := !finite(y)
+	if nanY {
+		// NumPy's SVD solve yields NaN coefficients (and a NaN residual) but
+		// still decides the rank from the matrix alone.
+		y = make([]float64, len(y))
+	}
+	l, err := lstsqFinite(a, m, n, y, rcond)
+	if nanY && err == nil {
+		for i := range l.x {
+			l.x[i] = math.NaN()
+		}
+		if l.resid != nil {
+			l.resid[0] = math.NaN()
+		}
+	}
+	return l, err
+}
+
+func lstsqFinite(a []float64, m, n int, y []float64, rcond float64) (lsq, error) {
 	householderQR(a, m, n, y)
 	k := min(m, n)
 	eff := rcond

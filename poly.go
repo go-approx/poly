@@ -53,7 +53,7 @@ func twoSum(a, b float64) (s, e float64) {
 
 // twoProd is the FMA-based error-free product: p+e == a*b exactly.
 func twoProd(a, b float64) (p, e float64) {
-	p = a * b
+	p = float64(a * b) // the conversion forbids fusing p into a later sum
 	e = math.FMA(a, b, -p)
 	return p, e
 }

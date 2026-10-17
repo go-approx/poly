@@ -103,25 +103,24 @@ func FitBasis(b Basis, x, y []float64, deg int, w []float64, rcond float64) (Fit
 	if rcond == 0 {
 		rcond = float64(m) * eps
 	}
-	a := make([]float64, m*n)
-	for i := 0; i < m; i++ {
-		for j := 0; j < n; j++ {
-			e := v[i*n+j]
-			if w != nil {
-				e *= w[i]
-			}
-			a[j*m+i] = e
-		}
-	}
-	rhs := append([]float64(nil), y...)
-	if w != nil {
-		for i := range rhs {
-			rhs[i] *= w[i]
-		}
-	}
-	scale := make([]float64, n)
-	for j := range scale {
+	a, scale := basisDesign(v, w, m, n)
+	return finishFit(a, m, n, weighted(y, w), rcond, scale, CovNone)
+}
+
+// basisDesign turns the row-major pseudo-Vandermonde v (m rows, n columns)
+// into the weighted, column-scaled column-major design matrix of
+// numpy.polynomial's _fit (a zero column keeps scale 1).
+func basisDesign(v, w []float64, m, n int) (a, scale []float64) {
+	a = make([]float64, m*n)
+	scale = make([]float64, n)
+	for j := 0; j < n; j++ {
 		col := a[j*m : (j+1)*m]
+		for i := range col {
+			col[i] = v[i*n+j]
+			if w != nil {
+				col[i] *= w[i]
+			}
+		}
 		scale[j] = math.Sqrt(dot(col, col))
 		if scale[j] == 0 {
 			scale[j] = 1
@@ -130,7 +129,7 @@ func FitBasis(b Basis, x, y []float64, deg int, w []float64, rcond float64) (Fit
 			col[i] /= scale[j]
 		}
 	}
-	return finishFit(a, m, n, rhs, rcond, scale, CovNone)
+	return a, scale
 }
 
 // FitSeries is ABCPolyBase.fit (e.g. Chebyshev.fit): the domain is taken from
