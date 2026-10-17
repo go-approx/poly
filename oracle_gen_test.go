@@ -178,14 +178,6 @@ func callOf(c Case) (oracle.Call, extract) {
 
 var specials = []float64{0, math.Copysign(0, -1), 1, -1, 2, -2, 1e-9, 1e3, 1e154, math.NaN(), math.Inf(1), math.Inf(-1)}
 
-func unif(r *rand.Rand, n int, lo, hi float64) []float64 {
-	v := make([]float64, n)
-	for i := range v {
-		v[i] = lo + (hi-lo)*r.Float64()
-	}
-	return v
-}
-
 func ac(name, op string, arr map[string]oracle.Floats, num map[string]float64) Case {
 	c := Case{Name: name, Op: op, Arr: arr, Num: map[string]oracle.Float{}}
 	for k, v := range num {

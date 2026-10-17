@@ -121,3 +121,11 @@ func ulpDist(a, b float64) int64 {
 	}
 	return d
 }
+
+func unif(r *rand.Rand, n int, lo, hi float64) []float64 {
+	v := make([]float64, n)
+	for i := range v {
+		v[i] = lo + (hi-lo)*r.Float64()
+	}
+	return v
+}

@@ -33,12 +33,12 @@ func PolyvalAll(dst, p, x []float64) []float64 {
 		dst = make([]float64, len(x))
 	}
 	dst = dst[:len(x)]
-	for i, xv := range x {
-		y := 0.0
-		for _, c := range p {
-			y = float64(y*xv) + c
-		}
-		dst[i] = y
+	i := 0
+	for ; i+4 <= len(x); i += 4 {
+		dst[i], dst[i+1], dst[i+2], dst[i+3] = polyval4(p, x[i], x[i+1], x[i+2], x[i+3])
+	}
+	for ; i < len(x); i++ {
+		dst[i] = Polyval(p, x[i])
 	}
 	return dst
 }

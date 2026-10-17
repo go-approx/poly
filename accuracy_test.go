@@ -378,3 +378,26 @@ func TestOracleBasisFit(t *testing.T) {
 		}
 	}
 }
+
+// TestFixtureInventory documents what the fixtures contain: how many cases,
+// how many of them make NumPy raise, and the extreme sizes.
+func TestFixtureInventory(t *testing.T) {
+	for _, f := range append([]string{"poly1d.json", "polyfit.json", "roots.json"}, basisFiles...) {
+		cs := loadCases(t, f)
+		raised, big := 0, 0
+		kinds := map[string]bool{}
+		for _, c := range cs {
+			kinds[c.Op] = true
+			if c.Err != "" {
+				raised++
+			}
+			if c.Gens != nil {
+				big++
+			}
+		}
+		t.Logf("%s: %d cases (%d ops), %d where numpy raises, %d regenerated large-n cases", f, len(cs), len(kinds), raised, big)
+		if raised == 0 || len(cs) < 30 {
+			t.Errorf("%s: fixture too thin", f)
+		}
+	}
+}

@@ -83,17 +83,18 @@ func ValAll(b Basis, dst, c, x []float64) ([]float64, error) {
 		return nil, ErrEmpty
 	}
 	var f func([]float64, float64) float64
+	var f4 func([]float64, float64, float64, float64, float64) (float64, float64, float64, float64)
 	switch b {
 	case Chebyshev:
-		f = chebval
+		f, f4 = chebval, chebval4
 	case Legendre:
-		f = legval
+		f, f4 = legval, legval4
 	case Hermite:
-		f = hermval
+		f, f4 = hermval, hermval4
 	case HermiteE:
-		f = hermeval
+		f, f4 = hermeval, hermeval4
 	case Laguerre:
-		f = lagval
+		f, f4 = lagval, lagval4
 	default:
 		return nil, ErrBasis
 	}
@@ -101,8 +102,14 @@ func ValAll(b Basis, dst, c, x []float64) ([]float64, error) {
 		dst = make([]float64, len(x))
 	}
 	dst = dst[:len(x)]
-	for i, xv := range x {
-		dst[i] = f(c, xv)
+	i := 0
+	if len(c) >= 3 { // the four-lane kernels start from the third coefficient
+		for ; i+4 <= len(x); i += 4 {
+			dst[i], dst[i+1], dst[i+2], dst[i+3] = f4(c, x[i], x[i+1], x[i+2], x[i+3])
+		}
+	}
+	for ; i < len(x); i++ {
+		dst[i] = f(c, x[i])
 	}
 	return dst, nil
 }
