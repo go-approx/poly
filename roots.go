@@ -4,17 +4,13 @@ import (
 	"sort"
 
 	"github.com/go-ndarray/ndarray"
-	"github.com/go-ndarray/ndarray/linalg"
 )
 
 // eigvals returns the eigenvalues of the row-major n*n matrix a, in the order
 // of LAPACK's geev (as numpy.linalg.eigvals). NaN/Inf is an error.
 func eigvals(a []float64, n int) ([]complex128, error) {
-	am, err := ndarray.FromData(a, n, n)
-	if err != nil {
-		return nil, err
-	}
-	w, err := linalg.Eigvals(am)
+	am, _ := ndarray.FromData(a, n, n) // n*n values for an n*n shape: cannot fail
+	w, err := eigvalsFn(am)
 	if err != nil {
 		return nil, err
 	}

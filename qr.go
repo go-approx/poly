@@ -18,6 +18,13 @@ var ErrRankDeficient = errors.New("poly: rank-deficient fit has no covariance")
 
 const eps = 0x1p-52
 
+// lstsqFn and eigvalsFn are the go-ndarray solvers; variables so that tests can
+// inject their (otherwise unreachable) failures.
+var (
+	lstsqFn   = linalg.LstsqRcond
+	eigvalsFn = linalg.Eigvals
+)
+
 func dot(a, b []float64) float64 {
 	b = b[:len(a)]
 	var s0, s1, s2, s3 float64
@@ -76,11 +83,10 @@ func householderQR(a []float64, m, n int, y []float64) {
 }
 
 type lsq struct {
-	x      []float64 // minimum-norm least-squares solution (length n)
-	rank   int
-	resid  []float64 // squared residual norm, only when rank == n and m > n
-	r      []float64 // column-major m*n after QR (valid R in the leading n*n block when m >= n)
-	viaSVD bool      // the rank decision was delegated to linalg.Lstsq
+	x     []float64 // minimum-norm least-squares solution (length n)
+	rank  int
+	resid []float64 // squared residual norm, only when rank == n and m > n
+	r     []float64 // column-major m*n after QR (valid R in the leading n*n block when m >= n)
 }
 
 func finite(v []float64) bool {
@@ -152,15 +158,10 @@ func lstsqFinite(a []float64, m, n int, y []float64, rcond float64) (lsq, error)
 			rm[i*n+j] = a[j*m+i]
 		}
 	}
-	am, err := ndarray.FromData(rm, k, n)
-	if err != nil {
-		return lsq{}, err
-	}
-	bm, err := ndarray.FromData(y[:k], k)
-	if err != nil {
-		return lsq{}, err
-	}
-	res, err := linalg.LstsqRcond(am, bm, rcond)
+	// The shapes are consistent by construction, so FromData cannot fail.
+	am, _ := ndarray.FromData(rm, k, n)
+	bm, _ := ndarray.FromData(y[:k], k)
+	res, err := lstsqFn(am, bm, rcond)
 	if err != nil {
 		return lsq{}, err
 	}
@@ -168,7 +169,7 @@ func lstsqFinite(a []float64, m, n int, y []float64, rcond float64) (lsq, error)
 	for i := range x {
 		x[i] = res.X.At(i)
 	}
-	out := lsq{x: x, rank: res.Rank, r: a, viaSVD: true}
+	out := lsq{x: x, rank: res.Rank, r: a}
 	if res.Rank == n && m > n {
 		out.resid = []float64{dot(y[n:m], y[n:m])}
 	}
