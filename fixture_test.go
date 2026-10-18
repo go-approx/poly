@@ -43,7 +43,7 @@ func (g Gen) Make() []float64 {
 	r := newRNG(g.Seed)
 	v := make([]float64, g.N)
 	for i := range v {
-		v[i] = g.Lo + (g.Hi-g.Lo)*r.Float64()
+		v[i] = g.Lo + float64((g.Hi-g.Lo)*r.Float64()) // rounded product: no FMA, same bits on every architecture
 	}
 	return v
 }
