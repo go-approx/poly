@@ -226,45 +226,82 @@ func Vander(b Basis, x []float64, deg int) ([]float64, error) {
 	}
 	n := deg + 1
 	v := make([]float64, len(x)*n)
-	for i, xv := range x {
-		vanderRow(b, v[i*n:(i+1)*n], xv)
+	for i0 := 0; i0 < len(x); i0 += vanderBlock {
+		i1 := min(len(x), i0+vanderBlock)
+		vanderRows(b, v[i0*n:i1*n], x[i0:i1], n)
 	}
 	return v, nil
 }
 
-// vanderRow fills row with B_0..B_deg at x.
-func vanderRow(b Basis, row []float64, x float64) {
-	row[0] = x*0 + 1
-	if len(row) == 1 {
+// vanderBlock rows are filled together, degree by degree: the recurrence
+// chains one row's entries, so interleaving independent rows lets the CPU
+// overlap them (the block stays in L1).
+const vanderBlock = 64
+
+// vanderRows fills the row-major rows v (len(x) rows of n) with B_0..B_{n-1}
+// at each x, by the same operations, in the same order per entry, as
+// numpy's forward recurrences.
+func vanderRows(b Basis, v, x []float64, n int) {
+	for i, xv := range x {
+		v[i*n] = xv*0 + 1
+	}
+	if n == 1 {
 		return
 	}
 	switch b {
 	case Chebyshev:
-		x2 := 2 * x
-		row[1] = x
-		for i := 2; i < len(row); i++ {
-			row[i] = float64(row[i-1]*x2) - row[i-2]
+		for i, xv := range x {
+			v[i*n+1] = xv
+		}
+		for k := 2; k < n; k++ {
+			for i, xv := range x {
+				r := v[i*n : i*n+n]
+				r[k] = float64(r[k-1]*(2*xv)) - r[k-2]
+			}
 		}
 	case Legendre:
-		row[1] = x
-		for i := 2; i < len(row); i++ {
-			row[i] = (float64(float64(row[i-1]*x)*float64(2*i-1)) - float64(row[i-2]*float64(i-1))) / float64(i)
+		for i, xv := range x {
+			v[i*n+1] = xv
+		}
+		for k := 2; k < n; k++ {
+			a, c, d := float64(2*k-1), float64(k-1), float64(k)
+			for i, xv := range x {
+				r := v[i*n : i*n+n]
+				r[k] = (float64(float64(r[k-1]*xv)*a) - float64(r[k-2]*c)) / d
+			}
 		}
 	case Hermite:
-		x2 := x * 2
-		row[1] = x2
-		for i := 2; i < len(row); i++ {
-			row[i] = float64(row[i-1]*x2) - float64(row[i-2]*float64(2*(i-1)))
+		for i, xv := range x {
+			v[i*n+1] = xv * 2
+		}
+		for k := 2; k < n; k++ {
+			c := float64(2 * (k - 1))
+			for i, xv := range x {
+				r := v[i*n : i*n+n]
+				r[k] = float64(r[k-1]*(xv*2)) - float64(r[k-2]*c)
+			}
 		}
 	case HermiteE:
-		row[1] = x
-		for i := 2; i < len(row); i++ {
-			row[i] = float64(row[i-1]*x) - float64(row[i-2]*float64(i-1))
+		for i, xv := range x {
+			v[i*n+1] = xv
+		}
+		for k := 2; k < n; k++ {
+			c := float64(k - 1)
+			for i, xv := range x {
+				r := v[i*n : i*n+n]
+				r[k] = float64(r[k-1]*xv) - float64(r[k-2]*c)
+			}
 		}
 	case Laguerre:
-		row[1] = 1 - x
-		for i := 2; i < len(row); i++ {
-			row[i] = (float64(row[i-1]*(float64(2*i-1)-x)) - float64(row[i-2]*float64(i-1))) / float64(i)
+		for i, xv := range x {
+			v[i*n+1] = 1 - xv
+		}
+		for k := 2; k < n; k++ {
+			a, c, d := float64(2*k-1), float64(k-1), float64(k)
+			for i, xv := range x {
+				r := v[i*n : i*n+n]
+				r[k] = (float64(r[k-1]*(a-xv)) - float64(r[k-2]*c)) / d
+			}
 		}
 	}
 }

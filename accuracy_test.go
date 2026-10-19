@@ -305,7 +305,27 @@ func fitCheck(t *testing.T, c Case, got map[string][]float64, name string, worst
 	rr := 0.0 // numpy's residual norm
 	if r := c.Out["resid"]; len(r) == 1 {
 		rr = math.Sqrt(r[0])
-		if e := math.Abs(got["resid"][0]-r[0]) / (eps * ny * ny); e > *worstSSR && k <= 1e10 {
+		e := math.Abs(got["resid"][0]-r[0]) / (eps * ny * ny)
+		if e > 1000 && k <= 1e10 {
+			// numpy's SSR is a float64 computation too: when we disagree,
+			// judge both against the exact residual.
+			var w []float64
+			if c.has("w") {
+				w = c.In("w")
+			}
+			exact := exactSSR(a, weighted(c.In("y"), w))
+			ours := math.Abs(got["resid"][0]-exact) / (eps * ny * ny)
+			np := math.Abs(r[0]-exact) / (eps * ny * ny)
+			t.Logf("%s: SSR %.3g eps|y|^2 from numpy; from the exact value: ours %.3g, numpy %.3g", name, e, ours, np)
+			// The promise is to be at least as accurate as numpy: our
+			// distance from the exact value only counts if it exceeds
+			// numpy's.
+			e = 0
+			if ours > np {
+				e = ours
+			}
+		}
+		if e > *worstSSR && k <= 1e10 {
 			*worstSSR = e
 		}
 	}

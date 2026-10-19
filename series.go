@@ -113,14 +113,24 @@ func FitBasis(b Basis, x, y []float64, deg int, w []float64, rcond float64) (Fit
 func basisDesign(v, w []float64, m, n int) (a, scale []float64) {
 	a = make([]float64, m*n)
 	scale = make([]float64, n)
-	for j := 0; j < n; j++ {
-		col := a[j*m : (j+1)*m]
-		for i := range col {
-			col[i] = v[i*n+j]
+	// Transpose by row blocks so both v and a are walked within cache.
+	const blk = 256
+	for i0 := 0; i0 < m; i0 += blk {
+		i1 := min(m, i0+blk)
+		for j := 0; j < n; j++ {
+			col := a[j*m+i0 : j*m+i1]
+			for i := range col {
+				col[i] = v[(i0+i)*n+j]
+			}
 			if w != nil {
-				col[i] *= w[i]
+				for i := range col {
+					col[i] *= w[i0+i]
+				}
 			}
 		}
+	}
+	for j := 0; j < n; j++ {
+		col := a[j*m : (j+1)*m]
 		scale[j] = math.Sqrt(dot(col, col))
 		if scale[j] == 0 {
 			scale[j] = 1
