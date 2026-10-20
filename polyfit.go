@@ -123,7 +123,7 @@ func finishFit(a []float64, m, n int, rhs []float64, rcond float64, scale []floa
 		if l.rank != n {
 			return Fit{}, ErrRankDeficient
 		}
-		v := rinvRinvT(l.r, m, n)
+		v := rinvRinvT(l.r, l.ld, n)
 		fac := 1.0
 		if cov == CovScaled {
 			fac = l.resid[0] / float64(m-n)
