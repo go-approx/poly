@@ -5,6 +5,10 @@ fitting, roots, and the Chebyshev, Legendre, Hermite, HermiteE and Laguerre
 bases, with the semantics of `numpy.polyfit`, `numpy.roots`, the `numpy.poly1d`
 helpers and the `numpy.polynomial` package.
 
+Released: **v0.1.0**. Documentation: <https://go-approx.github.io/docs/latest/poly/>
+· organisation: <https://go-approx.github.io/> · part of
+[go-scikit](https://go-scikit.github.io/).
+
 ```go
 import "github.com/go-approx/poly"
 
