@@ -66,6 +66,9 @@ func TestValAllChebyshevMatchesScalar(t *testing.T) {
 // A call with a large enough dst allocates nothing: the reversed coefficients
 // live in a pooled buffer.
 func TestBatchEvaluatorsAllocateNothing(t *testing.T) {
+	if raceOn {
+		t.Skip("sync.Pool drops items at random under the race detector")
+	}
 	x := unif(newRNG(24), 1000, -1, 1)
 	dst := make([]float64, len(x))
 	for _, n := range []int{6, 200} {
