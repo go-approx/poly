@@ -3,6 +3,8 @@ package poly
 import (
 	"errors"
 	"math"
+
+	"github.com/go-simd/floats"
 )
 
 // Basis names an orthogonal-polynomial family of numpy.polynomial.
@@ -85,8 +87,7 @@ func ValAll(b Basis, dst, c, x []float64) ([]float64, error) {
 	var f func([]float64, float64) float64
 	var f4 func([]float64, float64, float64, float64, float64) (float64, float64, float64, float64)
 	switch b {
-	case Chebyshev:
-		f, f4 = chebval, chebval4
+	case Chebyshev: // f stays nil: go-simd/floats' Chebval kernel, below
 	case Legendre:
 		f, f4 = legval, legval4
 	case Hermite:
@@ -102,6 +103,10 @@ func ValAll(b Basis, dst, c, x []float64) ([]float64, error) {
 		dst = make([]float64, len(x))
 	}
 	dst = dst[:len(x)]
+	if f == nil {
+		floats.Chebval(dst, x, c) // bit-identical to chebval and numpy's chebval
+		return dst, nil
+	}
 	i := 0
 	if len(c) >= 3 { // the four-lane kernels start from the third coefficient
 		for ; i+4 <= len(x); i += 4 {
