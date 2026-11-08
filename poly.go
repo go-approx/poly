@@ -4,6 +4,9 @@ import (
 	"errors"
 	"math"
 	"sort"
+	"sync"
+
+	"github.com/go-simd/floats"
 )
 
 // ErrEmpty is returned where NumPy raises because an input array is empty.
@@ -27,21 +30,40 @@ func Polyval(p []float64, x float64) float64 {
 }
 
 // PolyvalAll evaluates p at every element of x, writing into dst (allocated
-// when nil or too short) and returning it.
+// when nil or too short) and returning it. It runs go-simd/floats' Polyval
+// kernel, which takes the coefficients lowest degree first: p is reversed into
+// a buffer drawn from a pool, so a call allocates nothing beyond dst. The
+// results are bit-identical to Polyval (and to numpy.polyval), Inf and NaN
+// inputs included.
 func PolyvalAll(dst, p, x []float64) []float64 {
 	if len(dst) < len(x) {
 		dst = make([]float64, len(x))
 	}
 	dst = dst[:len(x)]
-	i := 0
-	for ; i+4 <= len(x); i += 4 {
-		dst[i], dst[i+1], dst[i+2], dst[i+3] = polyval4(p, x[i], x[i+1], x[i+2], x[i+3])
+	if len(x) == 0 {
+		return dst
 	}
-	for ; i < len(x); i++ {
-		dst[i] = Polyval(p, x[i])
+	if len(p) == 0 { // Polyval of no coefficients is 0
+		clear(dst)
+		return dst
 	}
+	bp := revPool.Get().(*[]float64)
+	rev := *bp
+	if cap(rev) < len(p) {
+		rev = make([]float64, len(p))
+	}
+	rev = rev[:len(p)]
+	for i, c := range p {
+		rev[len(p)-1-i] = c
+	}
+	floats.Polyval(dst, x, rev)
+	*bp = rev
+	revPool.Put(bp)
 	return dst
 }
+
+// revPool holds the reversed-coefficient buffers of PolyvalAll.
+var revPool = sync.Pool{New: func() any { b := make([]float64, 0, 64); return &b }}
 
 // twoSum is Knuth's error-free transformation: s+e == a+b exactly.
 func twoSum(a, b float64) (s, e float64) {

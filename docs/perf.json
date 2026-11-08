@@ -1,0 +1,972 @@
+{
+  "schema": 1,
+  "status": "deferred",
+  "date": "2026-11-08T10:11:13+01:00",
+  "commit": "",
+  "repo": "go-approx/poly",
+  "go_version": "go1.27.3",
+  "machine": "darwin/arm64, 16 CPUs",
+  "max_load": 8,
+  "load": {
+    "min": 0,
+    "median": 0,
+    "max": 0
+  },
+  "valid": true,
+  "rows": [
+    {
+      "name": "Polyval loop deg5",
+      "func": "Polyval",
+      "reference": "numpy 2.5.4 np.polyval",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "PolyvalAll deg5",
+      "func": "PolyvalAll",
+      "reference": "numpy 2.5.4 np.polyval",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Polyval loop deg20",
+      "func": "Polyval",
+      "reference": "numpy 2.5.4 np.polyval",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "PolyvalAll deg20",
+      "func": "PolyvalAll",
+      "reference": "numpy 2.5.4 np.polyval",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Val loop chebyshev",
+      "func": "Val",
+      "reference": "numpy 2.5.4 np.polynomial.chebyshev.chebval",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ValAll chebyshev",
+      "func": "ValAll",
+      "reference": "numpy 2.5.4 np.polynomial.chebyshev.chebval",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Vander chebyshev deg10",
+      "func": "Vander",
+      "reference": "numpy 2.5.4 np.polynomial.chebyshev.chebvander(x, 10)",
+      "parity": "exact",
+      "allocs": 1,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Der chebyshev 200 coef, m=2",
+      "func": "Der",
+      "reference": "numpy 2.5.4 np.polynomial.chebyshev.chebder(c, 2, 1.0)",
+      "parity": "exact",
+      "allocs": 3,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Int chebyshev 200 coef, m=2",
+      "func": "Int",
+      "reference": "numpy 2.5.4 np.polynomial.chebyshev.chebint(c, 2, [0.0, 0.0], 0.0, 1.0)",
+      "parity": "exact",
+      "allocs": 3,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Val loop legendre",
+      "func": "Val",
+      "reference": "numpy 2.5.4 np.polynomial.legendre.legval",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ValAll legendre",
+      "func": "ValAll",
+      "reference": "numpy 2.5.4 np.polynomial.legendre.legval",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Vander legendre deg10",
+      "func": "Vander",
+      "reference": "numpy 2.5.4 np.polynomial.legendre.legvander(x, 10)",
+      "parity": "exact",
+      "allocs": 1,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Der legendre 200 coef, m=2",
+      "func": "Der",
+      "reference": "numpy 2.5.4 np.polynomial.legendre.legder(c, 2, 1.0)",
+      "parity": "exact",
+      "allocs": 3,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Int legendre 200 coef, m=2",
+      "func": "Int",
+      "reference": "numpy 2.5.4 np.polynomial.legendre.legint(c, 2, [0.0, 0.0], 0.0, 1.0)",
+      "parity": "exact",
+      "allocs": 3,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Val loop hermite",
+      "func": "Val",
+      "reference": "numpy 2.5.4 np.polynomial.hermite.hermval",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ValAll hermite",
+      "func": "ValAll",
+      "reference": "numpy 2.5.4 np.polynomial.hermite.hermval",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Vander hermite deg10",
+      "func": "Vander",
+      "reference": "numpy 2.5.4 np.polynomial.hermite.hermvander(x, 10)",
+      "parity": "exact",
+      "allocs": 1,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Der hermite 200 coef, m=2",
+      "func": "Der",
+      "reference": "numpy 2.5.4 np.polynomial.hermite.hermder(c, 2, 1.0)",
+      "parity": "exact",
+      "allocs": 3,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Int hermite 200 coef, m=2",
+      "func": "Int",
+      "reference": "numpy 2.5.4 np.polynomial.hermite.hermint(c, 2, [0.0, 0.0], 0.0, 1.0)",
+      "parity": "exact",
+      "allocs": 3,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Val loop hermite_e",
+      "func": "Val",
+      "reference": "numpy 2.5.4 np.polynomial.hermite_e.hermeval",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ValAll hermite_e",
+      "func": "ValAll",
+      "reference": "numpy 2.5.4 np.polynomial.hermite_e.hermeval",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Vander hermite_e deg10",
+      "func": "Vander",
+      "reference": "numpy 2.5.4 np.polynomial.hermite_e.hermevander(x, 10)",
+      "parity": "exact",
+      "allocs": 1,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Der hermite_e 200 coef, m=2",
+      "func": "Der",
+      "reference": "numpy 2.5.4 np.polynomial.hermite_e.hermeder(c, 2, 1.0)",
+      "parity": "exact",
+      "allocs": 3,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Int hermite_e 200 coef, m=2",
+      "func": "Int",
+      "reference": "numpy 2.5.4 np.polynomial.hermite_e.hermeint(c, 2, [0.0, 0.0], 0.0, 1.0)",
+      "parity": "exact",
+      "allocs": 3,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Val loop laguerre",
+      "func": "Val",
+      "reference": "numpy 2.5.4 np.polynomial.laguerre.lagval",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "ValAll laguerre",
+      "func": "ValAll",
+      "reference": "numpy 2.5.4 np.polynomial.laguerre.lagval",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Vander laguerre deg10",
+      "func": "Vander",
+      "reference": "numpy 2.5.4 np.polynomial.laguerre.lagvander(x, 10)",
+      "parity": "exact",
+      "allocs": 1,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Der laguerre 200 coef, m=2",
+      "func": "Der",
+      "reference": "numpy 2.5.4 np.polynomial.laguerre.lagder(c, 2, 1.0)",
+      "parity": "exact",
+      "allocs": 3,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Int laguerre 200 coef, m=2",
+      "func": "Int",
+      "reference": "numpy 2.5.4 np.polynomial.laguerre.lagint(c, 2, [0.0, 0.0], 0.0, 1.0)",
+      "parity": "exact",
+      "allocs": 3,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "MapParms",
+      "func": "MapParms",
+      "reference": "numpy 2.5.4 np.polynomial.polyutils.mapparms([-1.0, 1.0], [0.0, 10.0])",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "MapDomain",
+      "func": "MapDomain",
+      "reference": "numpy 2.5.4 np.polynomial.polyutils.mapdomain",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "GetDomain",
+      "func": "GetDomain",
+      "reference": "numpy 2.5.4 np.polynomial.polyutils.getdomain",
+      "parity": "exact",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Polyder 1000 coef, m=2",
+      "func": "Polyder",
+      "reference": "numpy 2.5.4 np.polyder(p, 2)",
+      "parity": "exact",
+      "allocs": 3,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Polyint 1000 coef, m=2",
+      "func": "Polyint",
+      "reference": "numpy 2.5.4 np.polyint(p, 2)",
+      "parity": "exact",
+      "allocs": 3,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Conv 1000x100",
+      "func": "Conv",
+      "reference": "numpy 2.5.4 np.convolve",
+      "parity": "tolerance",
+      "allocs": 1,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Polymul 1000x100",
+      "func": "Polymul",
+      "reference": "numpy 2.5.4 np.polymul",
+      "parity": "tolerance",
+      "allocs": 1,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Polyadd 1000+100",
+      "func": "Polyadd",
+      "reference": "numpy 2.5.4 np.polyadd",
+      "parity": "exact",
+      "allocs": 1,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Polysub 1000-100",
+      "func": "Polysub",
+      "reference": "numpy 2.5.4 np.polysub",
+      "parity": "exact",
+      "allocs": 1,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Deconv 200/20",
+      "func": "Deconv",
+      "reference": "numpy 2.5.4 np.polydiv",
+      "parity": "tolerance",
+      "allocs": 2,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "PolyFromRoots 100",
+      "func": "PolyFromRoots",
+      "reference": "numpy 2.5.4 np.poly",
+      "parity": "tolerance",
+      "allocs": 1,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "PolyFromComplexRoots 100",
+      "func": "PolyFromComplexRoots",
+      "reference": "numpy 2.5.4 np.poly",
+      "parity": "tolerance",
+      "allocs": 9,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Polyfit deg3",
+      "func": "Polyfit",
+      "reference": "numpy 2.5.4 np.polyfit(x, y, 3)",
+      "parity": "tolerance",
+      "allocs": 5,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Polyfit deg10",
+      "func": "Polyfit",
+      "reference": "numpy 2.5.4 np.polyfit(x, y, 10)",
+      "parity": "tolerance",
+      "allocs": 5,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Roots deg30",
+      "func": "Roots",
+      "reference": "numpy 2.5.4 np.roots",
+      "parity": "tolerance",
+      "allocs": 32,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "NewSeries 31 coef",
+      "func": "NewSeries",
+      "reference": "numpy 2.5.4 np.polynomial.Chebyshev",
+      "parity": "exact",
+      "allocs": 1,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Series.Val loop",
+      "func": "Series.Val",
+      "reference": "numpy 2.5.4 np.polynomial.Chebyshev(c)(x)",
+      "parity": "tolerance",
+      "allocs": 0,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Series.ValAll",
+      "func": "Series.ValAll",
+      "reference": "numpy 2.5.4 np.polynomial.Chebyshev(c)(x)",
+      "parity": "tolerance",
+      "allocs": 1,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Series.Der",
+      "func": "Series.Der",
+      "reference": "numpy 2.5.4 np.polynomial.Chebyshev(c).deriv()",
+      "parity": "exact",
+      "allocs": 2,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Series.Int",
+      "func": "Series.Int",
+      "reference": "numpy 2.5.4 np.polynomial.Chebyshev(c).integ()",
+      "parity": "exact",
+      "allocs": 2,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "Series.Roots deg30",
+      "func": "Series.Roots",
+      "reference": "numpy 2.5.4 np.polynomial.Chebyshev(c).roots()",
+      "parity": "tolerance",
+      "allocs": 36,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "FitBasis chebyshev deg10",
+      "func": "FitBasis",
+      "reference": "numpy 2.5.4 np.polynomial.chebyshev.chebfit(x, y, 10)",
+      "parity": "tolerance",
+      "allocs": 6,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "FitSeries chebyshev deg10",
+      "func": "FitSeries",
+      "reference": "numpy 2.5.4 np.polynomial.Chebyshev.fit(x, y, 10)",
+      "parity": "tolerance",
+      "allocs": 7,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    },
+    {
+      "name": "RootsBasis chebyshev deg30",
+      "func": "RootsBasis",
+      "reference": "numpy 2.5.4 np.polynomial.chebyshev.chebroots",
+      "parity": "tolerance",
+      "allocs": 36,
+      "go": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ref": {
+        "median": 0,
+        "q1": 0,
+        "q3": 0
+      },
+      "ratio": 0
+    }
+  ]
+}

@@ -1,36 +1,52 @@
 # Performance against NumPy 2.5.4
 
-One core (GOMAXPROCS=1; OPENBLAS/OMP/MKL threads=1 for NumPy), Go go1.27.2 darwin/arm64, interleaved rounds (Go, NumPy, Go, NumPy, ...), median of 9 rounds. Target: no slower than NumPy (ratio <= 1).
+The comparison runs under [refbench](https://github.com/go-scikit/refbench)
+v0.1.2 (`rbtest.Perf`): one core (GOMAXPROCS=1; NumPy's BLAS threads pinned to
+1), interleaved rounds (Go, NumPy, Go, NumPy, ...), the 1-minute load read before
+every round and the measurement refused at a load of 8 or more. Target: no
+slower than NumPy (ratio <= 1); a row above 1 is an open defect.
 
-Load before: `14:48  up 27 days,  1:47, 1 user, load averages: 6.73 7.80 8.48`
+- The cases are in [`bench/perf_test.go`](../bench/perf_test.go): one or more
+  per public function, against the `numpy` / `numpy.polynomial` function it ports
+  (numpy 2.5.4, pinned with its hashes in `bench/refs.txt`). Both sides get the
+  same bytes (`go test -run TestDataParity -perf.parity .`) and every NumPy
+  expression is run once by `-perf.smoke`.
+- Functions with no NumPy counterpart are named in
+  [perf-exempt.md](perf-exempt.md) with the reason.
+- The table, with the allocation count of every case, is
+  [perf-table.md](perf-table.md), generated from [perf.json](perf.json).
 
-| operation | n (or degree) | Go | NumPy | Go / NumPy |
-|---|---:|---:|---:|---:|
-| polyval deg5 | 1000 | 1.4 µs | 9.1 µs | 0.16 |
-| polyfit deg3 | 1000 | 13.2 µs | 70.4 µs | 0.19 |
-| polyfit deg10 | 1000 | 47.8 µs | 148.6 µs | 0.32 |
-| chebval 21 coef | 1000 | 8.7 µs | 37.0 µs | 0.24 |
-| chebfit deg10 | 1000 | 58.0 µs | 146.0 µs | 0.40 |
-| chebvander deg10 | 1000 | 7.4 µs | 21.2 µs | 0.35 |
-| polyval deg5 | 10000 | 12.6 µs | 40.6 µs | 0.31 |
-| polyfit deg3 | 10000 | 136.9 µs | 507.5 µs | 0.27 |
-| polyfit deg10 | 10000 | 544.0 µs | 1.19 ms | 0.46 |
-| chebval 21 coef | 10000 | 87.2 µs | 193.7 µs | 0.45 |
-| chebfit deg10 | 10000 | 625.1 µs | 940.0 µs | 0.66 |
-| chebvander deg10 | 10000 | 68.8 µs | 97.3 µs | 0.71 |
-| polyval deg5 | 100000 | 117.4 µs | 287.5 µs | 0.41 |
-| polyfit deg3 | 100000 | 1.34 ms | 4.50 ms | 0.30 |
-| polyfit deg10 | 100000 | 5.22 ms | 10.21 ms | 0.51 |
-| chebval 21 coef | 100000 | 859.7 µs | 1.43 ms | 0.60 |
-| chebfit deg10 | 100000 | 6.12 ms | 7.25 ms | 0.84 |
-| chebvander deg10 | 100000 | 687.9 µs | 755.0 µs | 0.91 |
-| polyval deg5 | 1000000 | 1.29 ms | 2.86 ms | 0.45 |
-| polyfit deg3 | 1000000 | 13.20 ms | 42.20 ms | 0.31 |
-| polyfit deg10 | 1000000 | 53.60 ms | 92.60 ms | 0.58 |
-| chebval 21 coef | 1000000 | 8.78 ms | 15.00 ms | 0.59 |
-| chebfit deg10 | 1000000 | 60.08 ms | 63.14 ms | 0.95 |
-| chebvander deg10 | 1000000 | 6.77 ms | 7.51 ms | 0.90 |
-| roots | 10 | 13.7 µs | 25.0 µs | 0.55 |
-| roots | 100 | 1.40 ms | 2.13 ms | 0.66 |
+```
+cd bench
+go test -run TestPerf .                          CI mode: allocations, table, inventory
+go test -run TestPerf -cpu 1 -perf.run .         measure (refuses at a 1-minute load of 8 or more)
+go test -run TestPerf -perf.record .             allocation counts only (a deferred report)
+```
 
-Load after: `14:50  up 27 days,  1:48, 1 user, load averages: 6.05 7.11 8.13`
+CI runs the first line: the allocation count of every case must equal
+`perf.json` (an increase is a regression, a decrease must be recorded), the table
+must be what `perf.json` generates, and every public function must have a case or
+an exemption. Allocation counts are exact under any load; times are not, so the
+timings of the table are recorded by hand on an idle machine (status `deferred`
+until then).
+
+## Batch evaluation
+
+`PolyvalAll` and `ValAll` for `Chebyshev` run go-simd/floats v0.12.0 `Polyval`
+and `Chebval`, the kernels that reproduce `numpy.polynomial.polynomial.polyval`
+and `numpy.polynomial.chebyshev.chebval` operation by operation (no fused
+multiply-add; the SIMD lanes run over different points, so each point sees
+NumPy's order). `PolyvalAll` takes its coefficients highest degree first, the
+kernel lowest first: the coefficients are reversed into a pooled buffer, so a
+call allocates nothing beyond `dst` (`PolyvalAll` and `ValAll` rows: 0 allocs).
+The results are bit-identical to `Polyval` and `chebval` (and so to NumPy,
+whose fixtures `accuracy_test.go` compares bit for bit), Inf and NaN inputs
+included; `kernels_test.go` checks it for 1 to 70 coefficients.
+
+## Earlier measurement
+
+Taken before the refbench harness, with the in-repository oracle (Go go1.27.2
+darwin/arm64, median of 9 rounds, load 6.7 to 6.0): Go / NumPy between 0.16 and
+0.95 on every `polyval`, `polyfit`, `chebval`, `chebfit`, `chebvander` and `roots`
+row measured (n = 1000 to 10^6); the slowest, `chebfit` deg 10 at n = 10^6, was
+0.95.
