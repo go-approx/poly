@@ -3,8 +3,8 @@ module github.com/go-approx/poly/bench
 go 1.27.3
 
 require (
-	github.com/go-approx/poly v0.0.0
-	github.com/go-scikit/refbench v0.1.2
+	github.com/go-approx/poly v0.1.1
+	github.com/go-scikit/refbench v0.4.0
 )
 
 require (
